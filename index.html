@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html language="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Increment Decrement Age with Redux CDN</title>
+    </head>
+    <body>
+        <h1>Age-incrementor and decrementor</h1>
+        <div id="container">
+            <div>Age:<span id="age"></span></div><br/>
+            <button id="ageUp">Age Up</button>
+            <button id="ageDown">Age Down</button>
+        </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.min.js"></script>
+    <script>
+    //Use Redux only steps - i. Define initial state. ii. Create reducer function/s with state and action as arguments. If there're more of them use Redux.combineReducers() method to combine them and return a root reducer. iii. Create a store using Redux.createStore()method which takes root reducer as its first and required argument. preloadedState and enhancers are other two optional arguments to createStore method. (Extra but important step check if store is created by using Window.store = store. Concole.log anything to check that.)iv.Define how the user event can trigger a change in the state of store by using store.dispatch() method which takes type and payload as arguments. v. Use store.subscribe() method to subscribe to any changes made to the state of the store and reflect them on the UI. subscribe method takes a function as an argument essentially that's a callback function which gets called when the state of the store is changed. We can write logic in the callback function for diaplaying the state change appropriately on the UI.
+
+        //Step1: Define initial state
+        let initialState={
+            age:10
+        }
+        //Display initial value on the UI.
+        document.getElementById("age").innerHTML = initialState.age;
+        //Step2: Create a reducer.
+        const myReducer = (state = initialState,action)=>{            
+            newState = {...state};
+            if(action.type === "AGEUP"){
+               newState.age = newState.age + action.value;
+            }
+            if(action.type === "AGEDOWN"){
+                newState.age = newState.age - action.value;
+            }
+            return newState;
+        }
+        //Step3: Create a store.
+        const store = Redux.createStore(myReducer);
+        //Step5: Subscribe the state change to display on the UI.
+        store.subscribe(()=>{
+            document.getElementById("age").innerHTML = JSON.stringify(store.getState().age);
+            });
+        // Window.store = store;
+        // console.log(store.getState());
+        //Step4: Call dispatch() function as per the user actions on the UI.
+        document.querySelector("#ageUp").onclick = ()=>{
+            store.dispatch({
+                type:"AGEUP",
+                value:1
+            });
+        }
+        document.getElementById("ageDown").onclick = ()=>{
+            store.dispatch({
+                type:"AGEDOWN",
+                value:1
+            })
+        }          
+
+    </script>
+    </body>
+</html>
